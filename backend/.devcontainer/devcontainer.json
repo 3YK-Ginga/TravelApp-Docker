@@ -1,0 +1,6 @@
+{
+	"name": "Python3.12",
+	"dockerComposeFile": "../../docker-compose.yml",
+	"service": "backend",
+	"workspaceFolder": "/workspace"
+}

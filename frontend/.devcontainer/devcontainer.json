@@ -1,0 +1,6 @@
+{
+	"name": "Next.js",
+	"dockerComposeFile": "../../docker-compose.yml",
+	"service": "frontend",
+	"workspaceFolder": "/workspace"
+}
