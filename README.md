@@ -5,9 +5,8 @@ TravelAppをDocker Composeで構築しました。VScodeの拡張機能Dev conta
 
 ## 前提条件
 
-- Docker
-- Docker Compose
-- VisualStudio Code Dev container
+- Docker Desktop
+- VisualStudioCode Dev container
 ## インストール
 
 1. リポジトリをクローン
@@ -16,26 +15,37 @@ TravelAppをDocker Composeで構築しました。VScodeの拡張機能Dev conta
     git clone https://github.com/3YK-Ginga/TravelApp-Docker.git
     cd TravelApp-Docker
     ```
+## Visual Studio Codeで開く
 
-2. コンテナの起動
+1. 拡張機能からDev containerをインストール
+2. リポジトリのfrontend内の「vscode.bat」を実行
+3. しばらくすると右下に「コンテナーで再度開く」コンテナーという通知が出るので押す
+4. 「traveldb」の追加
+
+    http://localhost/phpmyadmin
+
+5. Docker Desktopでbackendコンテナを停止  → 再起動
+### WebArenaでの操作
+
+1. コンテナの起動
 
     ```sh
     docker compose up -d
     ```
 
-3. 「traveldb」の追加
+2. 「traveldb」の追加
 
-    http://localhost/phpmyadmin
+    http://ドメイン/phpmyadmin
 
-4. Docker Desktopでbackendコンテナを停止  → 再起動
+3. Dockerでbackendコンテナを停止 → 再起動
 
 ## 使用方法
 
 ### アクセス
 
-- **nginx**: [http://localhost](http://localhost:8000)
-- **frontend**: [http://localhost:3000](http://localhost)
-- **backend**: [http://localhost:3001](http://localhost/api)
+- **nginx**: [http://localhost:8000](http://localhost:8000)
+- **frontend**: [http://localhost](http://localhost)
+- **backend**: [http://localhost/api](http://localhost/api)
 - **phpMyAdmin**: [http://localhost/phpmyadmin](http://localhost/phpmyadmin)
 
 ### 停止
@@ -43,13 +53,7 @@ TravelAppをDocker Composeで構築しました。VScodeの拡張機能Dev conta
 ```sh
 docker compose down
 ```
-※ コンテナの停止はDocker DesktopからでもOK
-
-## Visual Studio Codeで開く
-
-1. 拡張機能からDev containerをインストール
-2. リポジトリのfrontendまたはbackend内の「vscode.bat」を実行
-3. しばらくすると右下に「コンテナーで再度開く」コンテナーという通知が出るので押す
+※ コンテナの停止はDocker DesktopからでもOK（VScode左下「開発コンテナー」 → リモート接続を終了する）
 
 ## トラブルシューティング
 
