@@ -38,7 +38,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       mysql:
-        condition: service_healthy
+        condition: service_started
     container_name: backend
     volumes:
       - ./backend/source:/workspace
@@ -60,10 +60,6 @@ services:
       - '3306'
     networks:
       - mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      timeout: 2s
-      retries: 5
   
   phpmyadmin:
     image: phpmyadmin
