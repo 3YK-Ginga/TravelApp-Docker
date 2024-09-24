@@ -18,12 +18,17 @@ services:
 
   frontend:
     hostname: frontend
-    image: node:22
-    working_dir: /workspace
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     container_name: frontend
     volumes:
       - ./frontend/source:/workspace
-    command: /bin/sh -c "yarn install && yarn dev"
+      - node_modules:/workspace/node_modules
+    
+    #　【フロントエンド】 サーバー起動手動化コマンド。自動化するときはコメントアウト
+    command: /bin/bash -c "/bin/bash"
+    
     tty: true
     expose:
       - '3000'
@@ -36,15 +41,25 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    container_name: backend
     depends_on:
       mysql:
-        condition: service_started
-    container_name: backend
+        condition: service_healthy
+    environment:
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_NAME=${MYSQL_NAME}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT}
     volumes:
       - ./backend/source:/workspace
+    
+    #　【バックエンド】 サーバー起動手動化コマンド。自動化するときはコメントアウト
+    command: /bin/bash -c "/bin/bash"
+    
     tty: true
     expose:
-      - '3001'
+      - '8000'
     networks:
       - backend
       - mysql
@@ -54,12 +69,19 @@ services:
     container_name: mysql
     volumes:
       - mysql_db:/var/lib/mysql
+      - ./initdb.d:/docker-entrypoint-initdb.d
     environment:
-      MYSQL_ROOT_PASSWORD: 'yutatravel5'
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
     expose:
       - '3306'
     networks:
       - mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -u${MYSQL_USER} -p${MYSQL_PASSWORD}"]
+      interval: 30s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
   
   phpmyadmin:
     image: phpmyadmin
@@ -74,10 +96,11 @@ services:
     networks:
       - phpmyadmin
       - mysql
-  
+
 volumes:
   mysql_db:
-  
+  node_modules:
+
 networks:
   frontend:
   backend:
